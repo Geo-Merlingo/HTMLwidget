@@ -63,23 +63,24 @@
 
   <script>
   function animateCount(el, duration = 2000) {
-    const target = parseInt(el.getAttribute('data-target'));
-    const steps = 60;
-    const increment = Math.ceil(target / steps);
-    let count = 0;
+  const target = parseInt(el.getAttribute('data-target'));
+  let startTimestamp = null;
 
-    function update() {
-      count += increment;
-      if (count >= target) {
-        el.textContent = target;
-      } else {
-        el.textContent = count;
-        setTimeout(update, duration / steps);
-      }
+  function step(timestamp) {
+    if (!startTimestamp) startTimestamp = timestamp;
+    const progress = Math.min((timestamp - startTimestamp) / duration, 1);
+    const value = Math.floor(progress * target);
+    el.textContent = value;
+
+    if (progress < 1) {
+      window.requestAnimationFrame(step);
+    } else {
+      el.textContent = target; // Ensure final value is exact
     }
-
-    update();
   }
+
+  window.requestAnimationFrame(step);
+}
 
   document.addEventListener("DOMContentLoaded", () => {
     fetch('totals.json')
