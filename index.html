@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>PFWRA Catch Totals</title>
+  <style>
+    body {
+      margin: 0;
+      padding: 0;
+      background: transparent;
+      font-family: 'Lato', sans-serif;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+    }
+    .container {
+      display: flex;
+      gap: 1rem;
+      padding: 1rem;
+    }
+    .value-box {
+      background-color: #94a88c;
+      color: white;
+      border-radius: 20px;
+      padding: 1rem;
+      width: 200px;
+      text-align: center;
+      box-shadow: 0 2px 6px rgba(0,0,0,0.1);
+    }
+    .value-box img {
+      height: 100px;
+    }
+    .title {
+      font-size: 1.2rem;
+      margin: 0.5rem 0;
+    }
+    .stat-number {
+      font-size: 2rem;
+      font-weight: bold;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <div class="value-box" style="background-color: #BFCA82;">
+      <img src="rat.png" alt="Rat Icon">
+      <div class="title">Total Rats</div>
+      <div class="stat-number" id="rats">0</div>
+    </div>
+    <div class="value-box" style="background-color: #588157;">
+      <img src="possum.png" alt="Possum Icon">
+      <div class="title">Total Possums</div>
+      <div class="stat-number" id="possums">0</div>
+    </div>
+    <div class="value-box" style="background-color: #94a88c;">
+      <img src="stoat.png" alt="Stoat Icon">
+      <div class="title">Total Mustelids</div>
+      <div class="stat-number" id="mustelids">0</div>
+    </div>
+  </div>
+
+  <script>
+  function animateCount(el, duration = 2000) {
+    const target = parseInt(el.getAttribute('data-target'));
+    const steps = 60;
+    const increment = Math.ceil(target / steps);
+    let count = 0;
+
+    function update() {
+      count += increment;
+      if (count >= target) {
+        el.textContent = target;
+      } else {
+        el.textContent = count;
+        setTimeout(update, duration / steps);
+      }
+    }
+
+    update();
+  }
+
+  document.addEventListener("DOMContentLoaded", () => {
+    fetch('totals.json')
+      .then(response => response.json())
+      .then(data => {
+        document.getElementById('rats').setAttribute('data-target', data.rats);
+        document.getElementById('possums').setAttribute('data-target', data.possums);
+        document.getElementById('mustelids').setAttribute('data-target', data.mustelids);
+
+        document.querySelectorAll(".stat-number").forEach(el => animateCount(el));
+      })
+      .catch(error => console.error("Failed to load totals.json:", error));
+  });
+</script>
+
+</body>
+</html>
