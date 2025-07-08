@@ -83,7 +83,7 @@
 }
 
   document.addEventListener("DOMContentLoaded", () => {
-    fetch(https://pfwra.blob.core.windows.net/public/totals.json)
+    fetch("https://pfwra.blob.core.windows.net/public/totals.json")
       .then(response => response.json())
       .then(data => {
         document.getElementById('rats').setAttribute('data-target', data.rats);
