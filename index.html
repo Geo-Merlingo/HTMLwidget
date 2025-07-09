@@ -89,18 +89,24 @@
   window.requestAnimationFrame(step);
 }
 
-  document.addEventListener("DOMContentLoaded", () => {
-    fetch('https://pfwra.blob.core.windows.net/public/totals.json')
-      .then(response => response.json())
-      .then(data => {
-        document.getElementById('rats').setAttribute('data-target', data.rats);
-        document.getElementById('possums').setAttribute('data-target', data.possums);
-        document.getElementById('mustelids').setAttribute('data-target', data.mustelids);
+ document.addEventListener("DOMContentLoaded", () => {
+  fetch("https://pfwra.blob.core.windows.net/public/totals.json")
+    .then(response => {
+      console.log("Fetch status:", response.status); // <== log HTTP status
+      return response.json();
+    })
+    .then(data => {
+      console.log("Fetched data:", data); // <== log JSON content
 
-        document.querySelectorAll(".stat-number").forEach(el => animateCount(el));
-      })
-      .catch(error => console.error("Failed to load totals.json:", error));
-  });
+      document.getElementById('rats').setAttribute('data-target', data.rats);
+      document.getElementById('possums').setAttribute('data-target', data.possums);
+      document.getElementById('mustelids').setAttribute('data-target', data.mustelids);
+
+      document.querySelectorAll(".stat-number").forEach(el => animateCount(el));
+    })
+    .catch(error => console.error("Failed to load totals.json:", error));
+});
+
 </script>
 
 </body>
